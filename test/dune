@@ -1,0 +1,6 @@
+(library
+ (name hl_protocol_test)
+ (inline_tests)
+ (libraries core hl_protocol yojson)
+ (preprocess
+  (pps ppx_jane)))

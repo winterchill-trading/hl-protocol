@@ -6,4 +6,10 @@
 (package
  (name hl-protocol)
  (synopsis "Hyperliquid wire types and JSON codecs")
- (depends ocaml dune core async ppx_jane ppx_yojson_conv yojson))
+ (depends
+  (ocaml (>= 5.2))
+  dune
+  core
+  ppx_jane
+  ppx_yojson_conv
+  yojson))

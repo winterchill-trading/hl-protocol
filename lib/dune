@@ -1,0 +1,6 @@
+(library
+ (name hl_protocol)
+ (public_name hl-protocol)
+ (libraries core yojson ppx_yojson_conv_lib)
+ (preprocess
+  (pps ppx_jane ppx_yojson_conv)))
