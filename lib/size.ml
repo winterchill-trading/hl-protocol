@@ -1,2 +1,2 @@
 open! Core
-include Fixed_point.Make ()
+include Fixed_decimal.Make ()

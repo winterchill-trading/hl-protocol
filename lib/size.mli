@@ -2,4 +2,4 @@
     [szi], [startPosition]). *)
 
 open! Core
-include Fixed_point.S
+include Fixed_decimal.S

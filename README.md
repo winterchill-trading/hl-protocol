@@ -22,8 +22,7 @@ Hyperliquid's public HTTP and websocket API.
 
 | Module | Description |
 | --- | --- |
-| `Fixed_point` | Functor for 8-decimal fixed-point numbers backed by `int`, encoded as decimal strings |
-| `Price`, `Size`, `Usd` | Distinct fixed-point types for prices, base-asset sizes and USD amounts |
+| `Price`, `Size`, `Usd` | Distinct fixed-point types for prices, base-asset sizes and USD amounts, each made with `Fixed_decimal.Make ()` from the [fixed-decimal](https://github.com/winterchill-trading/fixed-decimal) library |
 | `Coin` | Asset name (`"BTC"`, `"@107"`) |
 | `Asset` | Asset index used by the exchange endpoint (position in `Meta.universe`) |
 | `Address` | Account address, lowercased |

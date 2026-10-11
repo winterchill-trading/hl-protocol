@@ -10,6 +10,7 @@
   (ocaml (>= 5.2))
   dune
   core
+  fixed-decimal
   ppx_jane
   ppx_yojson_conv
   yojson))

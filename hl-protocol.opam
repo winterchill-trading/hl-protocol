@@ -8,6 +8,7 @@ depends: [
   "ocaml" {>= "5.2"}
   "dune" {>= "3.17"}
   "core"
+  "fixed-decimal"
   "ppx_jane"
   "ppx_yojson_conv"
   "yojson"
