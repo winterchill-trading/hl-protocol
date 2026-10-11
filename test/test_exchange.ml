@@ -98,3 +98,41 @@ let%expect_test "decode errors" =
     ((exn (Failure "Order_id: integer expected")) (json "\"x\""))
     |}]
 ;;
+
+let round_trip_response = Helpers.round_trip (module Exchange_response)
+
+let%expect_test "order response" =
+  round_trip_response
+    {|{"status":"ok","response":{"type":"order","data":{"statuses":[
+        {"resting":{"oid":77738308}},
+        {"resting":{"oid":77738309,"cloid":"0x00000000000000000000000000000007"}},
+        {"filled":{"totalSz":"0.02","avgPx":"1891.4","oid":77747314}},
+        {"error":"Order must have minimum value of $10."},
+        "waitingForTrigger"]}}}|};
+  [%expect {|
+    (Ok
+     (Order
+      ((Resting (oid 77738308) (cloid ()))
+       (Resting (oid 77738309) (cloid (0x00000000000000000000000000000007)))
+       (Filled (oid 77747314) (total_sz 0.02) (avg_px 1891.4) (cloid ()))
+       (Error "Order must have minimum value of $10.") Waiting_for_trigger)))
+    {"status":"ok","response":{"type":"order","data":{"statuses":[{"resting":{"oid":77738308}},{"resting":{"oid":77738309,"cloid":"0x00000000000000000000000000000007"}},{"filled":{"totalSz":"0.02","avgPx":"1891.4","oid":77747314}},{"error":"Order must have minimum value of $10."},"waitingForTrigger"]}}}
+    |}]
+;;
+
+let%expect_test "cancel, default and error responses" =
+  round_trip_response
+    {|{"status":"ok","response":{"type":"cancel","data":{"statuses":["success",{"error":"Order was never placed, already canceled, or filled."}]}}}|};
+  round_trip_response {|{"status":"ok","response":{"type":"default"}}|};
+  round_trip_response {|{"status":"err","response":"User or API Wallet does not exist."}|};
+  [%expect {|
+    (Ok
+     (Cancel
+      (Success (Error "Order was never placed, already canceled, or filled."))))
+    {"status":"ok","response":{"type":"cancel","data":{"statuses":["success",{"error":"Order was never placed, already canceled, or filled."}]}}}
+    (Ok Default)
+    {"status":"ok","response":{"type":"default"}}
+    (Err "User or API Wallet does not exist.")
+    {"status":"err","response":"User or API Wallet does not exist."}
+    |}]
+;;
