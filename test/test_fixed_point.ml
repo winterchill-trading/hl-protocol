@@ -33,7 +33,10 @@ let%expect_test "excess precision truncates toward zero" =
 
 let%expect_test "invalid strings" =
   List.iter [ ""; "-"; "."; "1.2.3"; "abc"; "1e5"; "99999999999" ] ~f:(fun s ->
-    printf "%S -> %s\n" s (Option.value_map (Price.of_string_opt s) ~default:"None" ~f:Price.to_string));
+    printf
+      "%S -> %s\n"
+      s
+      (Option.value_map (Price.of_string_opt s) ~default:"None" ~f:Price.to_string));
   [%expect
     {|
     "" -> None
@@ -50,7 +53,9 @@ let%expect_test "arithmetic and rounding" =
   let open Size in
   let a = of_string "1.5" in
   let b = of_string "0.25" in
-  print_s [%sexp (a + b : t), (a - b : t), (neg a : t), (scale b ~by:3 : t), (sum [ a; b; b ] : t)];
+  print_s
+    [%sexp
+      (a + b : t), (a - b : t), (neg a : t), (scale b ~by:3 : t), (sum [ a; b; b ] : t)];
   print_s
     [%sexp
       (round_down (of_string "1.23456") ~decimals:2 : t)
@@ -80,6 +85,8 @@ let%expect_test "json" =
 ;;
 
 let%expect_test "float conversion" =
-  print_s [%sexp (Price.of_float 0.1 : Price.t), (Price.to_float (Price.of_string "2.5") : float)];
+  print_s
+    [%sexp
+      (Price.of_float 0.1 : Price.t), (Price.to_float (Price.of_string "2.5") : float)];
   [%expect {| (0.1 2.5) |}]
 ;;

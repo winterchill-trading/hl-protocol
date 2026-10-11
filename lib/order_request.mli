@@ -1,6 +1,6 @@
-(** A single order in an [order] or [modify] action, in Hyperliquid's compact wire
-    form: [{"a": asset, "b": isBuy, "p": limitPx, "s": sz, "r": reduceOnly,
-    "t": orderType, "c": cloid}]. [c] is omitted when there is no client id.
+(** A single order in an [order] or [modify] action, in Hyperliquid's compact wire form:
+    [{"a": asset, "b": isBuy, "p": limitPx, "s": sz, "r": reduceOnly, "t": orderType, "c": cloid}].
+    [c] is omitted when there is no client id.
 
     The asset is identified by its index (see [Meta.asset_of_coin]), as on the real
     exchange endpoint. *)

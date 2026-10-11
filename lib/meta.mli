@@ -1,6 +1,6 @@
 (** Perpetuals metadata returned by the [meta] info request:
-    [{"universe": [{"name": "BTC", "szDecimals": 5, "maxLeverage": 50}, ...]}].
-    A coin's asset index is its position in [universe]. *)
+    [{"universe": [{"name": "BTC", "szDecimals": 5, "maxLeverage": 50}, ...]}]. A coin's
+    asset index is its position in [universe]. *)
 
 open! Core
 

@@ -11,7 +11,8 @@ let%expect_test "client requests" =
     ; {|{"method":"ping"}|}
     ]
     ~f:(Helpers.round_trip (module Ws_request));
-  [%expect {|
+  [%expect
+    {|
     (Subscribe (L2_book (coin BTC)))
     {"method":"subscribe","subscription":{"type":"l2Book","coin":"BTC"}}
     (Subscribe (Trades (coin ETH)))
@@ -35,7 +36,8 @@ let%expect_test "subscriptionResponse, pong, error, unknown" =
   round_trip {|{"channel":"pong"}|};
   round_trip {|{"channel":"error","data":"Invalid subscription"}|};
   round_trip {|{"channel":"candle","data":{"t":1}}|};
-  [%expect {|
+  [%expect
+    {|
     (Subscription_response (Subscribe (Trades (coin SOL))))
     {"channel":"subscriptionResponse","data":{"method":"subscribe","subscription":{"type":"trades","coin":"SOL"}}}
     Pong
@@ -50,7 +52,8 @@ let%expect_test "subscriptionResponse, pong, error, unknown" =
 let%expect_test "l2Book" =
   round_trip
     {|{"channel":"l2Book","data":{"coin":"BTC","time":1700000000000,"levels":[[{"px":"100","sz":"1","n":1}],[{"px":"101","sz":"2","n":2}]]}}|};
-  [%expect {|
+  [%expect
+    {|
     (L2_book
      ((coin BTC) (time 1700000000000) (bids (((px 100) (sz 1) (n 1))))
       (asks (((px 101) (sz 2) (n 2))))))
@@ -64,7 +67,8 @@ let%expect_test "trades" =
        "hash":"0x0000000000000000000000000000000000000000000000000000000000000000",
        "time":1700000000000,"tid":42,
        "users":["0x0000000000000000000000000000000000000001","0x0000000000000000000000000000000000000002"]}]}|};
-  [%expect {|
+  [%expect
+    {|
     (Trades
      (((coin BTC) (side Sell) (px 113000.5) (sz 0.01)
        (hash 0x0000000000000000000000000000000000000000000000000000000000000000)
@@ -82,7 +86,8 @@ let%expect_test "orderUpdates" =
        "oid":7,"timestamp":1700000000000,"origSz":"1"},"status":"open","statusTimestamp":1700000000001},
       {"order":{"coin":"ETH","side":"B","limitPx":"3000","sz":"0","oid":8,"timestamp":1700000000000,"origSz":"1"},
        "status":"perpMaxPositionRejected","statusTimestamp":1700000000002}]}|};
-  [%expect {|
+  [%expect
+    {|
     (Order_updates
      (((order
         ((coin ETH) (side Buy) (limit_px 3000) (sz 0.5) (oid 7)
@@ -104,7 +109,8 @@ let%expect_test "userFills and allMids" =
   round_trip
     {|{"channel":"userFills","data":{"user":"0x0000000000000000000000000000000000000001","fills":[]}}|};
   round_trip {|{"channel":"allMids","data":{"mids":{"BTC":"100.5","ETH":"3000"}}}|};
-  [%expect {|
+  [%expect
+    {|
     (User_fills
      ((is_snapshot true) (user 0x0000000000000000000000000000000000000001)
       (fills

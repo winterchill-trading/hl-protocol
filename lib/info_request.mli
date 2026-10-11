@@ -1,7 +1,7 @@
 (** Body POSTed to [/info], tagged by ["type"]:
 
-    - [{"type": "l2Book", "coin": "BTC", "nSigFigs": 5, "mantissa": 2}]
-      ([nSigFigs] and [mantissa] optional)
+    - [{"type": "l2Book", "coin": "BTC", "nSigFigs": 5, "mantissa": 2}] ([nSigFigs] and
+      [mantissa] optional)
     - [{"type": "allMids"}]
     - [{"type": "openOrders", "user": "0x..."}]
     - [{"type": "userFills", "user": "0x..."}]

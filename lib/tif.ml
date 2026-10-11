@@ -1,6 +1,9 @@
 open! Core
 
-type t = | Gtc | Ioc | Alo
+type t =
+  | Gtc
+  | Ioc
+  | Alo
 [@@deriving sexp, compare, equal, hash, enumerate]
 
 let to_wire = function

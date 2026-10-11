@@ -92,7 +92,8 @@ let%expect_test "decode errors" =
   in
   try_decode {|{"type":"twapOrder"}|};
   try_decode {|{"type":"cancel","cancels":[{"a":0,"o":"x"}]}|};
-  [%expect {|
+  [%expect
+    {|
     ((exn (Failure "Exchange_action: unsupported action type"))
      (json "{\"type\":\"twapOrder\"}"))
     ((exn (Failure "Order_id: integer expected")) (json "\"x\""))
@@ -109,7 +110,8 @@ let%expect_test "order response" =
         {"filled":{"totalSz":"0.02","avgPx":"1891.4","oid":77747314}},
         {"error":"Order must have minimum value of $10."},
         "waitingForTrigger"]}}}|};
-  [%expect {|
+  [%expect
+    {|
     (Ok
      (Order
       ((Resting (oid 77738308) (cloid ()))
@@ -125,7 +127,8 @@ let%expect_test "cancel, default and error responses" =
     {|{"status":"ok","response":{"type":"cancel","data":{"statuses":["success",{"error":"Order was never placed, already canceled, or filled."}]}}}|};
   round_trip_response {|{"status":"ok","response":{"type":"default"}}|};
   round_trip_response {|{"status":"err","response":"User or API Wallet does not exist."}|};
-  [%expect {|
+  [%expect
+    {|
     (Ok
      (Cancel
       (Success (Error "Order was never placed, already canceled, or filled."))))

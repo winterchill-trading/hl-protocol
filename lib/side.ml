@@ -1,6 +1,8 @@
 open! Core
 
-type t = | Buy | Sell
+type t =
+  | Buy
+  | Sell
 [@@deriving sexp, compare, equal, hash, enumerate]
 
 let to_wire = function

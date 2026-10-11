@@ -1,6 +1,8 @@
 (library
  (name hl_protocol_test)
- (inline_tests)
+ (inline_tests
+  (flags
+   (:standard -source-tree-root .)))
  (libraries core hl_protocol yojson)
  (preprocess
   (pps ppx_jane)))

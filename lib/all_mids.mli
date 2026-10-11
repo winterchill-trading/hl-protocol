@@ -1,5 +1,5 @@
-(** Mid prices by coin, encoded as a JSON object [{"BTC": "113000.5", ...}]. Order
-    is preserved. *)
+(** Mid prices by coin, encoded as a JSON object [{"BTC": "113000.5", ...}]. Order is
+    preserved. *)
 
 open! Core
 

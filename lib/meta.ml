@@ -20,7 +20,10 @@ let asset_of_coin t coin =
 ;;
 
 let coin_of_asset t asset =
-  List.nth t.universe (Asset.to_int asset) |> Option.map ~f:(fun (m : Asset_meta.t) -> m.name)
+  List.nth t.universe (Asset.to_int asset)
+  |> Option.map ~f:(fun (m : Asset_meta.t) -> m.name)
 ;;
 
-let find t coin = List.find t.universe ~f:(fun (m : Asset_meta.t) -> Coin.equal m.name coin)
+let find t coin =
+  List.find t.universe ~f:(fun (m : Asset_meta.t) -> Coin.equal m.name coin)
+;;

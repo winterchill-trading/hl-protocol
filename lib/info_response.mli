@@ -1,5 +1,5 @@
-(** Response bodies from [/info]. The JSON carries no tag, so decoding needs the
-    request that produced it. *)
+(** Response bodies from [/info]. The JSON carries no tag, so decoding needs the request
+    that produced it. *)
 
 open! Core
 

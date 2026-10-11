@@ -4,9 +4,9 @@
 open! Core
 
 module Status : sig
-  (** ["open"], ["filled"], ["canceled"], ["triggered"], ["rejected"],
-      ["marginCanceled"]; any other value (Hyperliquid has many specific cancel and
-      reject reasons) is kept verbatim in [Other]. *)
+  (** ["open"], ["filled"], ["canceled"], ["triggered"], ["rejected"], ["marginCanceled"];
+      any other value (Hyperliquid has many specific cancel and reject reasons) is kept
+      verbatim in [Other]. *)
   type t =
     | Open
     | Filled

@@ -2,7 +2,10 @@
 
 open! Core
 
-type t = | Gtc | Ioc | Alo
+type t =
+  | Gtc
+  | Ioc
+  | Alo
 [@@deriving sexp, compare, equal, hash, enumerate, yojson]
 
 (** The JSON string used on the wire. *)

@@ -3,8 +3,8 @@
 open! Core
 
 module Target : sig
-  (** The order being modified: an exchange id (JSON integer) or a client id
-      (JSON string). *)
+  (** The order being modified: an exchange id (JSON integer) or a client id (JSON
+      string). *)
   type t =
     | Oid of Order_id.t
     | Cloid of Cloid.t

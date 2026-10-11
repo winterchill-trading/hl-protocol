@@ -92,7 +92,6 @@ module Make () = struct
     type t = int [@@deriving compare, equal, hash]
 
     let to_string = units_to_string
-
     let of_string_opt = units_of_string_opt
 
     let of_string s =

@@ -1,8 +1,5 @@
-(** A resting order, as returned by [openOrders] and embedded in websocket
-    [orderUpdates]:
-    [{"coin": "BTC", "side": "A", "limitPx": "29792.0", "sz": "0.0",
-      "oid": 91490942, "timestamp": 1681247412573, "origSz": "5.0",
-      "cloid": "0x..."}].
+(** A resting order, as returned by [openOrders] and embedded in websocket [orderUpdates]:
+    [{"coin": "BTC", "side": "A", "limitPx": "29792.0", "sz": "0.0", "oid": 91490942, "timestamp": 1681247412573, "origSz": "5.0", "cloid": "0x..."}].
     [sz] is the remaining size. [origSz] and [cloid] are optional. *)
 
 open! Core

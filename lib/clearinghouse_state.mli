@@ -7,9 +7,8 @@
      "time": 1708622398623}
     v}
 
-    The [{"type": "oneWay", "position": ...}] wrapper is flattened into
-    [positions]. Unmodelled fields (e.g. [cumFunding], [returnOnEquity]) are
-    ignored on input. *)
+    The [{"type": "oneWay", "position": ...}] wrapper is flattened into [positions].
+    Unmodelled fields (e.g. [cumFunding], [returnOnEquity]) are ignored on input. *)
 
 open! Core
 

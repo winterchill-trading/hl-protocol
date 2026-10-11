@@ -15,7 +15,9 @@ let yojson_of_t : t -> Yojson.Safe.t = function
 ;;
 
 let t_of_yojson json =
-  let subscription () = Subscription.t_of_yojson (Json.member_exn json ~key:"subscription") in
+  let subscription () =
+    Subscription.t_of_yojson (Json.member_exn json ~key:"subscription")
+  in
   match Json.tag json ~key:"method" with
   | "subscribe" -> Subscribe (subscription ())
   | "unsubscribe" -> Unsubscribe (subscription ())

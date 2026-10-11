@@ -1,5 +1,4 @@
-(** Order grouping for an [order] action: ["na"], ["normalTpsl"] or
-    ["positionTpsl"]. *)
+(** Order grouping for an [order] action: ["na"], ["normalTpsl"] or ["positionTpsl"]. *)
 
 open! Core
 

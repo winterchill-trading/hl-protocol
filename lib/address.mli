@@ -1,4 +1,5 @@
-(** An account address, e.g. ["0x0000000000000000000000000000000000000000"]. Normalised to lowercase. *)
+(** An account address, e.g. ["0x0000000000000000000000000000000000000000"]. Normalised to
+    lowercase. *)
 
 open! Core
 

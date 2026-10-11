@@ -36,7 +36,8 @@ module Filled_wire = struct
 end
 
 let yojson_of_t : t -> Yojson.Safe.t = function
-  | Resting { oid; cloid } -> `Assoc [ "resting", Resting_wire.yojson_of_t { oid; cloid } ]
+  | Resting { oid; cloid } ->
+    `Assoc [ "resting", Resting_wire.yojson_of_t { oid; cloid } ]
   | Filled { oid; total_sz; avg_px; cloid } ->
     `Assoc [ "filled", Filled_wire.yojson_of_t { total_sz; avg_px; oid; cloid } ]
   | Error msg -> `Assoc [ "error", `String msg ]

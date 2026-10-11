@@ -18,8 +18,7 @@ module Response = struct
 
   let yojson_of_t : t -> Yojson.Safe.t = function
     | Order statuses ->
-      `Assoc
-        [ "type", `String "order"; "data", Order_statuses.yojson_of_t { statuses } ]
+      `Assoc [ "type", `String "order"; "data", Order_statuses.yojson_of_t { statuses } ]
     | Cancel statuses ->
       `Assoc
         [ "type", `String "cancel"; "data", Cancel_statuses.yojson_of_t { statuses } ]
@@ -43,7 +42,8 @@ type t =
 [@@deriving sexp, compare, equal]
 
 let yojson_of_t : t -> Yojson.Safe.t = function
-  | Ok response -> `Assoc [ "status", `String "ok"; "response", Response.yojson_of_t response ]
+  | Ok response ->
+    `Assoc [ "status", `String "ok"; "response", Response.yojson_of_t response ]
   | Err msg -> `Assoc [ "status", `String "err"; "response", `String msg ]
 ;;
 

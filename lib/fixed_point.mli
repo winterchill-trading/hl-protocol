@@ -1,8 +1,8 @@
 (** Fixed-point decimals backed by an [int] counting units of [10^-8].
 
     Hyperliquid encodes prices, sizes and USD amounts as decimal strings (e.g.
-    ["113377.5"]). Values parsed with more than 8 fractional digits are truncated
-    toward zero. The range is roughly +/- 4.6e10. *)
+    ["113377.5"]). Values parsed with more than 8 fractional digits are truncated toward
+    zero. The range is roughly +/- 4.6e10. *)
 
 open! Core
 
@@ -23,14 +23,14 @@ module type S = sig
   val to_units : t -> int
   val of_int : int -> t
 
-  (** Parses a decimal string such as ["-12.5"], ["0.001"] or ["100"]. Raises on
-      malformed input. *)
+  (** Parses a decimal string such as ["-12.5"], ["0.001"] or ["100"]. Raises on malformed
+      input. *)
   val of_string : string -> t
 
   val of_string_opt : string -> t option
 
-  (** Shortest decimal representation without trailing zeros, e.g. ["100"],
-      ["0.001"], ["-12.5"]. *)
+  (** Shortest decimal representation without trailing zeros, e.g. ["100"], ["0.001"],
+      ["-12.5"]. *)
   val to_string : t -> string
 
   (** Rounds to the nearest unit. *)

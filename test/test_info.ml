@@ -12,7 +12,8 @@ let%expect_test "info requests" =
     ; {|{"type":"meta"}|}
     ]
     ~f:(Helpers.round_trip (module Info_request));
-  [%expect {|
+  [%expect
+    {|
     (L2_book (coin BTC) (n_sig_figs ()) (mantissa ()))
     {"type":"l2Book","coin":"BTC"}
     (L2_book (coin ETH) (n_sig_figs (5)) (mantissa ()))
@@ -46,7 +47,8 @@ let%expect_test "l2Book" =
     {|{"coin":"BTC","time":1754450974231,"levels":[
         [{"px":"113377.0","sz":"7.6699","n":17},{"px":"113376.0","sz":"0.0001","n":1}],
         [{"px":"113378.0","sz":"1.2","n":3}]]}|};
-  [%expect {|
+  [%expect
+    {|
     (L2_book
      ((coin BTC) (time 1754450974231)
       (bids (((px 113377) (sz 7.6699) (n 17)) ((px 113376) (sz 0.0001) (n 1))))
@@ -59,7 +61,8 @@ let%expect_test "allMids" =
   round_trip_response
     ~request:{|{"type":"allMids"}|}
     {|{"BTC":"113000.5","ETH":"3000.05","@107":"41.2"}|};
-  [%expect {|
+  [%expect
+    {|
     (All_mids ((BTC 113000.5) (ETH 3000.05) (@107 41.2)))
     {"BTC":"113000.5","ETH":"3000.05","@107":"41.2"}
     |}]
@@ -71,7 +74,8 @@ let%expect_test "openOrders" =
     {|[{"coin":"BTC","limitPx":"29792.0","oid":91490942,"side":"A","sz":"0.0","timestamp":1681247412573},
        {"coin":"ETH","limitPx":"2000","oid":91490943,"side":"B","sz":"1","timestamp":1681247412574,
         "origSz":"2","cloid":"0x00000000000000000000000000000009","reduceOnly":false}]|};
-  [%expect {|
+  [%expect
+    {|
     (Open_orders
      (((coin BTC) (side Sell) (limit_px 29792) (sz 0) (oid 91490942)
        (timestamp 1681247412573) (orig_sz ()) (cloid ()))
@@ -89,7 +93,8 @@ let%expect_test "userFills" =
         "hash":"0xa166e3fa63c25663024b03f2e0da011a00307e4017465df020210d3d432e7cb8",
         "oid":90542681,"px":"18.435","side":"B","startPosition":"26.86","sz":"93.53",
         "time":1681222254710,"fee":"0.01","feeToken":"USDC","tid":118906512037719}]|};
-  [%expect {|
+  [%expect
+    {|
     (User_fills
      (((coin AVAX) (px 18.435) (sz 93.53) (side Buy) (time 1681222254710)
        (start_position 26.86) (dir "Open Long") (closed_pnl 0)
@@ -117,7 +122,8 @@ let%expect_test "clearinghouseState" =
       "crossMarginSummary":{"accountValue":"13104.514502","totalMarginUsed":"0.0","totalNtlPos":"0.0","totalRawUsd":"13104.514502"},
       "marginSummary":{"accountValue":"13109.482328","totalMarginUsed":"4.967826","totalNtlPos":"100.02765","totalRawUsd":"13009.454678"},
       "time":1708622398623,"withdrawable":"13104.514502"}|};
-  [%expect {|
+  [%expect
+    {|
     (Clearinghouse_state
      ((positions
        (((coin ETH) (szi 0.0335) (entry_px (2986.3)) (position_value 100.02765)
@@ -152,7 +158,8 @@ let%expect_test "meta and asset lookup" =
       (Meta.asset_of_coin meta (Coin.of_string "ETH") : Asset.t option)
       , (Meta.asset_of_coin meta (Coin.of_string "DOGE") : Asset.t option)
       , (Meta.coin_of_asset meta (Asset.of_int 2) : Coin.t option)];
-  [%expect {|
+  [%expect
+    {|
     (Meta
      ((universe
        (((name BTC) (sz_decimals 5) (max_leverage 50) (only_isolated false))

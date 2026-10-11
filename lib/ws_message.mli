@@ -1,11 +1,11 @@
-(** Server-to-client websocket messages, [{"channel": "...", "data": ...}],
-    decoded by channel. Unrecognised channels are preserved as [Unknown]. *)
+(** Server-to-client websocket messages, [{"channel": "...", "data": ...}], decoded by
+    channel. Unrecognised channels are preserved as [Unknown]. *)
 
 open! Core
 
 module User_fills : sig
-  (** [{"isSnapshot": true, "user": "0x...", "fills": [...]}]. The first message
-      after subscribing is a snapshot; [isSnapshot] is omitted on later messages. *)
+  (** [{"isSnapshot": true, "user": "0x...", "fills": [...]}]. The first message after
+      subscribing is a snapshot; [isSnapshot] is omitted on later messages. *)
   type t =
     { is_snapshot : bool
     ; user : Address.t

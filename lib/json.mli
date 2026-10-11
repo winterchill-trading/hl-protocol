@@ -1,5 +1,5 @@
-(** Opaque JSON values, used for fields this library does not model (e.g.
-    signatures) and for unknown websocket channels. *)
+(** Opaque JSON values, used for fields this library does not model (e.g. signatures) and
+    for unknown websocket channels. *)
 
 open! Core
 

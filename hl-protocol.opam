@@ -6,7 +6,7 @@ homepage: "https://github.com/winterchill-trading/hl-protocol"
 bug-reports: "https://github.com/winterchill-trading/hl-protocol/issues"
 depends: [
   "ocaml" {>= "5.2"}
-  "dune" {>= "3.0"}
+  "dune" {>= "3.17"}
   "core"
   "ppx_jane"
   "ppx_yojson_conv"
