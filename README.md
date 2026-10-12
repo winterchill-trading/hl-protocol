@@ -2,7 +2,7 @@
 
 Hyperliquid wire types and JSON codecs
 
-Built with [OxCaml](https://oxcaml.org) and the Jane Street library stack (Base, Core, Async).
+Built with [OxCaml](https://oxcaml.org) and the Jane Street library stack (Base, Core).
 
 ## Build
 
