@@ -64,7 +64,14 @@ let t_of_yojson json =
   let channel = Json.tag json ~key:"channel" in
   let data () = Json.member_exn json ~key:"data" in
   match channel with
-  | "subscriptionResponse" -> Subscription_response (Ws_request.t_of_yojson (data ()))
+  | "subscriptionResponse" ->
+    (* Echoes of subscriptions this library does not model, e.g. activeAssetCtx. *)
+    (match Ws_request.t_of_yojson (data ()) with
+     | request -> Subscription_response request
+     | exception (Ppx_yojson_conv_lib.Yojson_conv.Of_yojson_error _ as exn) ->
+       (match Json.member (data ()) ~key:"subscription" with
+        | Some (`Assoc _) -> Unknown { channel; data = data () }
+        | _ -> raise exn))
   | "l2Book" -> L2_book (L2_book.t_of_yojson (data ()))
   | "trades" -> Trades ([%of_yojson: Trade.t list] (data ()))
   | "orderUpdates" -> Order_updates ([%of_yojson: Order_update.t list] (data ()))

@@ -36,6 +36,8 @@ let%expect_test "subscriptionResponse, pong, error, unknown" =
   round_trip {|{"channel":"pong"}|};
   round_trip {|{"channel":"error","data":"Invalid subscription"}|};
   round_trip {|{"channel":"candle","data":{"t":1}}|};
+  round_trip
+    {|{"channel":"subscriptionResponse","data":{"method":"subscribe","subscription":{"type":"candle","coin":"BTC","interval":"1m"}}}|};
   [%expect
     {|
     (Subscription_response (Subscribe (Trades (coin SOL))))
@@ -46,6 +48,10 @@ let%expect_test "subscriptionResponse, pong, error, unknown" =
     {"channel":"error","data":"Invalid subscription"}
     (Unknown (channel candle) (data "{\"t\":1}"))
     {"channel":"candle","data":{"t":1}}
+    (Unknown (channel subscriptionResponse)
+     (data
+      "{\"method\":\"subscribe\",\"subscription\":{\"type\":\"candle\",\"coin\":\"BTC\",\"interval\":\"1m\"}}"))
+    {"channel":"subscriptionResponse","data":{"method":"subscribe","subscription":{"type":"candle","coin":"BTC","interval":"1m"}}}
     |}]
 ;;
 

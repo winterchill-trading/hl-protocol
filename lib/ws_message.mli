@@ -1,5 +1,7 @@
 (** Server-to-client websocket messages, [{"channel": "...", "data": ...}], decoded by
-    channel. Unrecognised channels are preserved as [Unknown]. *)
+    channel. Unrecognised channels are preserved as [Unknown], and so are
+    [subscriptionResponse] echoes of subscriptions that {!Subscription} does not model
+    (e.g. [activeAssetCtx]). *)
 
 open! Core
 
