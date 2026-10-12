@@ -8,6 +8,8 @@ Built with [OxCaml](https://oxcaml.org) and the Jane Street library stack (Base,
 
 ```sh
 opam switch create 5.2.0+ox --repos ox=git+https://github.com/oxcaml/opam-repository.git,default
+opam pin add fixed-decimal https://github.com/winterchill-trading/fixed-decimal.git --no-action
+opam pin add exchange-core https://github.com/winterchill-trading/exchange-core.git --no-action
 opam install . --deps-only --with-test
 dune build && dune test
 ```
@@ -20,18 +22,24 @@ Hyperliquid's public HTTP and websocket API.
 
 ### Primitives
 
+The venue-neutral primitives live in
+[exchange-core](https://github.com/winterchill-trading/exchange-core) and are re-exported
+here with type equalities (`Hl_protocol.Price.t = Exchange_core.Price.t`,
+`Hl_protocol.Address.t = Exchange_core.Account.t`, ...), so values pass between the two
+without conversion. This library adds Hyperliquid's JSON encodings and format rules.
+
 | Module | Description |
 | --- | --- |
-| `Price`, `Size`, `Usd` | Distinct fixed-point types for prices, base-asset sizes and USD amounts, each made with `Fixed_decimal.Make ()` from the [fixed-decimal](https://github.com/winterchill-trading/fixed-decimal) library |
-| `Coin` | Asset name (`"BTC"`, `"@107"`) |
+| `Price`, `Size`, `Usd` | `Exchange_core.Price`, `Size`, `Usd`: distinct fixed-point types made with `Fixed_decimal.Make ()` from [fixed-decimal](https://github.com/winterchill-trading/fixed-decimal), encoded as decimal strings |
+| `Coin` | `Exchange_core.Symbol`: asset name (`"BTC"`, `"@107"`) |
 | `Asset` | Asset index used by the exchange endpoint (position in `Meta.universe`) |
-| `Address` | Account address, lowercased |
-| `Side` | `Buy` / `Sell`, encoded as `"B"` / `"A"` |
-| `Tif` | `Gtc` / `Ioc` / `Alo` |
+| `Address` | `Exchange_core.Account`: account address, lowercased by `of_string` and the decoder |
+| `Side` | `Exchange_core.Side`: `Buy` / `Sell`, encoded as `"B"` / `"A"` |
+| `Tif` | `Exchange_core.Tif`: `Gtc` / `Ioc` / `Alo` |
 | `Tpsl` | `Tp` / `Sl` for trigger orders |
-| `Order_type` | `{"limit": {"tif": ...}}` or `{"trigger": {...}}` |
-| `Order_id` | Exchange order id (`int64`) |
-| `Cloid` | Client order id (`0x` + 32 hex digits) |
+| `Order_type` | `{"limit": {"tif": ...}}` or `{"trigger": {...}}` (Hyperliquid's own, not `Exchange_core.Order_type`) |
+| `Order_id` | `Exchange_core.Order_id`: exchange order id (`int64`), a JSON integer |
+| `Cloid` | `Exchange_core.Client_order_id` restricted to `0x` + 32 hex digits |
 | `Json` | Opaque JSON values plus small decoding helpers |
 | `Codec` | `module type S` satisfied by every wire type |
 
