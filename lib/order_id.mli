@@ -1,15 +1,10 @@
-(** Exchange-assigned order id ([oid]), a JSON integer. *)
+(** Exchange-assigned order id ([oid]): {!Exchange_core.Order_id}, a JSON integer. *)
 
 open! Core
 
-type t [@@deriving sexp, compare, equal, hash, yojson]
+include module type of struct
+  include Exchange_core.Order_id
+end
 
-include Comparable.S with type t := t
-include Hashable.S with type t := t
-
-val of_int64 : int64 -> t
-val to_int64 : t -> int64
-val of_int : int -> t
-val to_int_exn : t -> int
-val to_string : t -> string
-val of_string : string -> t
+val yojson_of_t : t -> Yojson.Safe.t
+val t_of_yojson : Yojson.Safe.t -> t
