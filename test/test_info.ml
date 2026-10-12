@@ -145,6 +145,32 @@ let%expect_test "clearinghouseState" =
     |}]
 ;;
 
+let%expect_test "liquidationPx: absent, null, out of range" =
+  List.iter
+    [ {|"liquidationPx":"2866.26936529",|}
+    ; {|"liquidationPx":null,|}
+    ; ""
+    ; {|"liquidationPx":"184467440737.09551616",|}
+    ; {|"liquidationPx":"1e300",|}
+    ]
+    ~f:(fun field ->
+      let position =
+        Clearinghouse_state.Position.t_of_yojson
+          (Yojson.Safe.from_string
+             (sprintf
+                {|{"coin":"ETH","szi":"0.01","entryPx":"2986.3","positionValue":"29.86",%s"unrealizedPnl":"0","leverage":{"type":"cross","value":1},"marginUsed":"29.86","maxLeverage":50}|}
+                field))
+      in
+      print_s [%sexp (position.liquidation_px : Price.t option)]);
+  [%expect {|
+    (2866.26936529)
+    ()
+    ()
+    ()
+    ()
+    |}]
+;;
+
 let%expect_test "meta and asset lookup" =
   let json =
     {|{"universe":[{"name":"BTC","szDecimals":5,"maxLeverage":50},
