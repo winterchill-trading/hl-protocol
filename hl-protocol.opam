@@ -9,6 +9,7 @@ depends: [
   "dune" {>= "3.17"}
   "core"
   "fixed-decimal"
+  "exchange-core"
   "ppx_jane"
   "ppx_yojson_conv"
   "yojson"

@@ -11,6 +11,7 @@
   dune
   core
   fixed-decimal
+  exchange-core
   ppx_jane
   ppx_yojson_conv
   yojson))

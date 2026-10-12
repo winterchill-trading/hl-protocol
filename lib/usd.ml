@@ -1,2 +1,2 @@
 open! Core
-include Fixed_decimal.Make ()
+include Exchange_core.Usd
