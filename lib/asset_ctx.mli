@@ -16,9 +16,9 @@
 
     Named [Asset_ctx] so that it does not shadow a consumer's own [Active_asset_ctx] under
     [open Hl_protocol]. {!Subscription} and {!Ws_message} have no constructor for this
-    channel yet (adding one would break exhaustive matches downstream). Requests are built with {!Request} and
-    messages arrive as [Ws_message.Unknown]; {!of_ws_message} and {!to_ws_message}
-    convert. *)
+    channel yet (adding one would break exhaustive matches downstream). Requests are built
+    with {!Request} and messages arrive as [Ws_message.Unknown]; {!of_ws_message} and
+    {!to_ws_message} convert. *)
 
 open! Core
 
