@@ -80,6 +80,7 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 | `Trade` | Public trade |
 | `Order_update` | Order status update |
 | `Ws_message` | `{"channel", "data"}` messages decoded by channel |
+| `Asset_ctx` | `activeAssetCtx` channel (funding, mark, oracle, volumes) and its (un)subscribe requests, carried as `Ws_message.Unknown` |
 
 ### Differences from the Hyperliquid API
 
@@ -87,5 +88,40 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 - Numbers are re-encoded in their shortest form (`"113377.0"` becomes `"113377"`),
   and digits past the 8th decimal place are dropped when parsing.
 - Response decoders ignore unknown fields. Only the fields listed above are kept.
-- Unknown websocket channels decode to `Ws_message.Unknown`, and unknown order
-  statuses to `Order_update.Status.Other`.
+- Unknown websocket channels decode to `Ws_message.Unknown`, and so do
+  `subscriptionResponse` echoes of subscriptions `Subscription` does not model; unknown
+  order statuses decode to `Order_update.Status.Other`.
+- `activeAssetCtx` has no `Subscription` or `Ws_message` constructor yet, because
+  consumers match those variants exhaustively. Build requests with
+  `Asset_ctx.Request` and read messages with `Asset_ctx.of_ws_message`.
+- `liquidationPx` decodes to `None` when absent, `null`, or outside the fixed-point range
+  (about 4.6e10).
+
+## Coverage against mainnet
+
+Checked by tests that decode and re-encode real frames: `test/fixtures/mainnet-info-ws-2026-10-12`
+(info responses and websocket frames of one market-making account, captured
+2026-10-12, trimmed) and `test/fixtures/hyperliquid-BTC-2026-10-12T13-35` (a raw minute of
+the BTC feed in the recorder format). Everything else is written from the API docs and
+checked only against hand-written samples and the simulator.
+
+| Endpoint | Message | Mainnet sample |
+| --- | --- | --- |
+| info | `allMids` | verified |
+| info | `l2Book` | verified |
+| info | `meta` | verified |
+| info | `openOrders` | verified |
+| info | `userFills` | verified |
+| info | `clearinghouseState` | verified, including large and `null` `liquidationPx` |
+| exchange | `order`, `cancel`, `cancelByCloid`, `modify` requests | unverified (no signing here) |
+| exchange | `Exchange_response`, `Order_status`, `Cancel_status` | unverified |
+| ws | `subscribe` / `unsubscribe` / `ping` requests | verified (the same JSON is accepted by mainnet) |
+| ws | `subscriptionResponse` | verified (`l2Book` echoes add `nSigFigs`, `mantissa`, `fast`, which are dropped) |
+| ws | `trades` | verified |
+| ws | `l2Book` | verified |
+| ws | `allMids` | verified |
+| ws | `userFills` (snapshot and updates) | verified |
+| ws | `orderUpdates` | verified |
+| ws | `activeAssetCtx` (`Asset_ctx`) | verified for perps; spot shape from a sample only |
+| ws | `pong`, `error` | verified |
+
