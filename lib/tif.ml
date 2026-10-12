@@ -1,10 +1,5 @@
 open! Core
-
-type t =
-  | Gtc
-  | Ioc
-  | Alo
-[@@deriving sexp, compare, equal, hash, enumerate]
+include Exchange_core.Tif
 
 let to_wire = function
   | Gtc -> "Gtc"

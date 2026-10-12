@@ -1,8 +1,9 @@
-(** Time in force: good-til-cancel, immediate-or-cancel, add-liquidity-only (post only). *)
+(** Time in force ({!Exchange_core.Tif}): good-til-cancel, immediate-or-cancel,
+    add-liquidity-only (post only), encoded as ["Gtc"], ["Ioc"], ["Alo"]. *)
 
 open! Core
 
-type t =
+type t = Exchange_core.Tif.t =
   | Gtc
   | Ioc
   | Alo

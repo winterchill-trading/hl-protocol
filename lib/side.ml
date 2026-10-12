@@ -1,9 +1,5 @@
 open! Core
-
-type t =
-  | Buy
-  | Sell
-[@@deriving sexp, compare, equal, hash, enumerate]
+include Exchange_core.Side
 
 let to_wire = function
   | Buy -> "B"
@@ -25,16 +21,4 @@ let t_of_yojson (json : Yojson.Safe.t) =
      | Some t -> t
      | None -> Json.error "side: unknown value" json)
   | _ -> Json.error "side: string expected" json
-;;
-
-let of_is_buy is_buy = if is_buy then Buy else Sell
-
-let is_buy = function
-  | Buy -> true
-  | Sell -> false
-;;
-
-let flip = function
-  | Buy -> Sell
-  | Sell -> Buy
 ;;

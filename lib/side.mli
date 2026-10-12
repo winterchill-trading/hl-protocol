@@ -1,8 +1,9 @@
-(** Order or trade side. Encoded as ["B"] (bid, buy) or ["A"] (ask, sell). *)
+(** Order or trade side: {!Exchange_core.Side} with Hyperliquid's encoding, ["B"] (bid,
+    buy) or ["A"] (ask, sell). *)
 
 open! Core
 
-type t =
+type t = Exchange_core.Side.t =
   | Buy
   | Sell
 [@@deriving sexp, compare, equal, hash, enumerate, yojson]
