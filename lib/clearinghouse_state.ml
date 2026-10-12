@@ -41,6 +41,26 @@ module Leverage = struct
   ;;
 end
 
+(* [null], absent, or a price outside the fixed-point range (deep out-of-the-money
+   liquidation prices of small positions can be astronomically large) all mean "no usable
+   liquidation price". *)
+module Liquidation_px = struct
+  type t = Price.t option [@@deriving sexp, compare, equal]
+
+  let yojson_of_t : t -> Yojson.Safe.t = function
+    | None -> `Null
+    | Some px -> Price.yojson_of_t px
+  ;;
+
+  let t_of_yojson : Yojson.Safe.t -> t = function
+    | `Null -> None
+    | `String s -> Price.of_string_opt s
+    | (`Int _ | `Intlit _ | `Float _) as json ->
+      Price.of_string_opt (Yojson.Safe.to_string json)
+    | json -> Json.error "Clearinghouse_state: liquidationPx is not a price" json
+  ;;
+end
+
 module Position = struct
   type t =
     { coin : Coin.t
@@ -48,7 +68,7 @@ module Position = struct
     ; entry_px : Price.t option [@key "entryPx"] [@default None]
     ; position_value : Usd.t [@key "positionValue"]
     ; unrealized_pnl : Usd.t [@key "unrealizedPnl"]
-    ; liquidation_px : Price.t option [@key "liquidationPx"] [@default None]
+    ; liquidation_px : Liquidation_px.t [@key "liquidationPx"] [@default None]
     ; leverage : Leverage.t
     ; margin_used : Usd.t [@key "marginUsed"]
     ; max_leverage : int [@key "maxLeverage"]

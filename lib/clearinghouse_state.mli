@@ -33,7 +33,9 @@ module Position : sig
     ; entry_px : Price.t option
     ; position_value : Usd.t
     ; unrealized_pnl : Usd.t
-    ; liquidation_px : Price.t option (** [null] when there is no liquidation price *)
+    ; liquidation_px : Price.t option
+    (** [None] when the field is absent or [null], or when the price is outside the
+        fixed-point range (about 4.6e10); encoded as [null]. *)
     ; leverage : Leverage.t
     ; margin_used : Usd.t
     ; max_leverage : int
