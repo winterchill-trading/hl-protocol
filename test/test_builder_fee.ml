@@ -45,3 +45,22 @@ let%expect_test "percent strings" =
     (1.5% (Ok 1500))
     |}]
 ;;
+
+let%expect_test "maxBuilderFee request and response" =
+  Helpers.round_trip
+    (module Max_builder_fee)
+    {|{"type":"maxBuilderFee","user":"0x0000000000000000000000000000000000000001","builder":"0x8C967E73E7B15087c42A10D344cFf4c96D877f1D"}|};
+  (* The documented response is a bare integer: 1 means 0.001%. *)
+  print_s
+    [%sexp (Max_builder_fee.response_of_yojson (Yojson.Safe.from_string "1") : int)];
+  (match Max_builder_fee.t_of_yojson (Yojson.Safe.from_string {|{"type":"meta"}|}) with
+   | _ -> print_endline "accepted"
+   | exception exn -> print_s [%sexp (exn : exn)]);
+  [%expect {|
+    ((user 0x0000000000000000000000000000000000000001)
+     (builder 0x8c967e73e7b15087c42a10d344cff4c96d877f1d))
+    {"type":"maxBuilderFee","user":"0x0000000000000000000000000000000000000001","builder":"0x8c967e73e7b15087c42a10d344cff4c96d877f1d"}
+    1
+    ("Of_yojson_error (Failure(\"Max_builder_fee: not a maxBuilderFee request\"), {\"type\":\"meta\"})")
+    |}]
+;;
