@@ -24,3 +24,34 @@ type t =
   ; cloid : Cloid.t option
   }
 [@@deriving sexp, compare, equal, yojson]
+
+(** The [liquidation] object of a fill that was part of a liquidation (websocket docs,
+    [FillLiquidation]): [{"liquidatedUser": "0x...", "markPx": "18.4", "method": "market"}].
+    [liquidatedUser] is optional; [method] is ["market"] or ["backstop"], kept as the raw
+    string. The docs type [markPx] as a number while other prices are strings, so both
+    decode. *)
+module Liquidation : sig
+  type t =
+    { liquidated_user : Address.t option
+    ; mark_px : Price.t
+    ; method_ : string
+    }
+  [@@deriving sexp, compare, equal, yojson]
+end
+
+(** A fill with the optional fields that {!t} does not carry: [builderFee] (the part of
+    [fee] paid to the builder, absent when zero) and [liquidation]. Decodes the same JSON
+    object as {!t}. These are not fields of {!t} itself, because simulators and tests build
+    {!t} records and new fields would break them. *)
+module Detailed : sig
+  type fill = t [@@deriving sexp, compare, equal]
+
+  type t =
+    { fill : fill
+    ; builder_fee : Usd.t option
+    ; liquidation : Liquidation.t option
+    }
+  [@@deriving sexp, compare, equal, yojson]
+
+  val of_fill : fill -> t
+end
