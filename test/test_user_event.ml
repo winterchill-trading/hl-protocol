@@ -95,3 +95,30 @@ let%expect_test "another address's fills and order updates" =
     {"channel":"orderUpdates","data":[{"order":{"coin":"BTC","side":"A","limitPx":"114000","sz":"0","oid":11,"timestamp":1760000000000,"origSz":"0.01"},"status":"filled","statusTimestamp":1760000000500}]}
     |}]
 ;;
+
+let%expect_test "userFillsByTime request" =
+  Helpers.round_trip
+    (module User_fills_by_time)
+    (sprintf {|{"type":"userFillsByTime","user":"%s","startTime":1760000000000}|} leader);
+  Helpers.round_trip
+    (module User_fills_by_time)
+    (sprintf
+       {|{"type":"userFillsByTime","user":"%s","startTime":1,"endTime":2,"aggregateByTime":true}|}
+       leader);
+  print_s
+    [%sexp
+      (User_fills_by_time.response_of_yojson
+         (Yojson.Safe.from_string (sprintf "[%s]" fill))
+       |> List.length
+       : int)];
+  [%expect
+    {|
+    ((user 0x00000000000000000000000000000000000000aa) (start_time 1760000000000)
+     (end_time ()) (aggregate_by_time ()))
+    {"type":"userFillsByTime","user":"0x00000000000000000000000000000000000000aa","startTime":1760000000000}
+    ((user 0x00000000000000000000000000000000000000aa) (start_time 1)
+     (end_time (2)) (aggregate_by_time (true)))
+    {"type":"userFillsByTime","user":"0x00000000000000000000000000000000000000aa","startTime":1,"endTime":2,"aggregateByTime":true}
+    1
+    |}]
+;;
