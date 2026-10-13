@@ -95,3 +95,41 @@ let%expect_test "other types are rejected" =
     true
     |}]
 ;;
+
+let%expect_test "request body" =
+  let action =
+    User_signed_action.approve_agent
+      Testnet
+      ~agent_name:"copy"
+      ~agent_address:(Address.of_string "0x00000000000000000000000000000000000000a1")
+      ~nonce:5
+  in
+  let request =
+    User_signed_request.create
+      ~signature:(`Assoc [ "r", `String "0x1"; "s", `String "0x2"; "v", `Int 27 ])
+      action
+  in
+  let json = User_signed_request.yojson_of_t request in
+  print_endline (Yojson.Safe.to_string json);
+  Helpers.round_trip (module User_signed_request) (Yojson.Safe.to_string json);
+  print_s
+    [%sexp
+      (List.map
+         [ json
+         ; Yojson.Safe.from_string {|{"action":{"type":"order","orders":[]},"nonce":1}|}
+         ; `Null
+         ]
+         ~f:User_signed_request.is_user_signed_body
+       : bool list)];
+  [%expect
+    {|
+    {"action":{"type":"approveAgent","hyperliquidChain":"Testnet","signatureChainId":"0x66eee","agentAddress":"0x00000000000000000000000000000000000000a1","agentName":"copy","nonce":5},"nonce":5,"signature":{"r":"0x1","s":"0x2","v":27}}
+    ((action
+      (Approve_agent (hyperliquid_chain Testnet) (signature_chain_id 0x66eee)
+       (agent_address 0x00000000000000000000000000000000000000a1)
+       (agent_name (copy)) (nonce 5)))
+     (nonce 5) (signature ("{\"r\":\"0x1\",\"s\":\"0x2\",\"v\":27}")))
+    {"action":{"type":"approveAgent","hyperliquidChain":"Testnet","signatureChainId":"0x66eee","agentAddress":"0x00000000000000000000000000000000000000a1","agentName":"copy","nonce":5},"nonce":5,"signature":{"r":"0x1","s":"0x2","v":27}}
+    (true false false)
+    |}]
+;;
