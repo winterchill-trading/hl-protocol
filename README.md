@@ -76,10 +76,11 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 | `L2_book` | Book snapshot with bids and asks of `{px, sz, n}` |
 | `All_mids` | Mid price per coin |
 | `Open_order` | Resting order |
-| `User_fill` | Fill record |
+| `User_fill` | Fill record; `User_fill.Detailed` adds the optional `builderFee` and `liquidation` |
 | `Clearinghouse_state` | Positions, leverage and margin summaries |
 | `Meta` | Perp universe (`name`, `szDecimals`, `maxLeverage`) and coin/asset lookups |
 | `User_fills_by_time` | `userFillsByTime` request (at most 2000 fills per response) |
+| `Max_builder_fee` | `maxBuilderFee` request; the response is the approved cap in tenths of a basis point |
 
 ### Stats host
 
@@ -111,12 +112,13 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 - `activeAssetCtx` has no `Subscription` or `Ws_message` constructor yet, because
   consumers match those variants exhaustively. Build requests with
   `Asset_ctx.Request` and read messages with `Asset_ctx.of_ws_message`.
-- `approveAgent`, `approveBuilderFee`, `userFillsByTime`, `userEvents` and the order
+- `approveAgent`, `approveBuilderFee`, `userFillsByTime`, `maxBuilderFee`, `userEvents` and the order
   `builder` field live in their own modules rather than as new constructors of
   `Exchange_action`, `Info_request` or `Subscription`, for the same reason. A server that
   decodes `/exchange` bodies with `Exchange_request` accepts a builder order and drops
   the builder; `User_signed_request.is_user_signed_body` picks the approval decoder.
-- `User_fill` ignores `builderFee` and `liquidation` on fills.
+- `User_fill.t` ignores `builderFee` and `liquidation` on fills, so code that builds fill
+  records keeps compiling; decode with `User_fill.Detailed` to keep them.
 - `liquidationPx` decodes to `None` when absent, `null`, or outside the fixed-point range
   (about 4.6e10).
 
