@@ -61,6 +61,11 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 | `Order_status` | `resting` / `filled` / `error` / `waitingForFill` / `waitingForTrigger` |
 | `Cancel_status` | `"success"` / `{"error": ...}` |
 | `Exchange_response` | `{"status": "ok" \| "err", "response": ...}` |
+| `Builder_fee` | The order action's `builder: {"b", "f"}` field (`f` in tenths of a basis point) and `maxFeeRate` percent strings |
+| `Order_action` | `order` action with the optional `builder`; converts to and from `Exchange_action.Order` |
+| `Exchange_envelope` | `Exchange_request` layout around a raw JSON action, plus `expiresAfter` |
+| `User_signed_action` | `approveAgent` and `approveBuilderFee`, with their EIP-712 primary types and typed fields |
+| `User_signed_request` | `{"action", "nonce", "signature"}` body for those, and a body classifier for servers |
 
 ### Info endpoint (`POST /info`)
 
@@ -74,6 +79,13 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 | `User_fill` | Fill record |
 | `Clearinghouse_state` | Positions, leverage and margin summaries |
 | `Meta` | Perp universe (`name`, `szDecimals`, `maxLeverage`) and coin/asset lookups |
+| `User_fills_by_time` | `userFillsByTime` request (at most 2000 fills per response) |
+
+### Stats host
+
+| Module | Description |
+| --- | --- |
+| `Leaderboard` | `GET stats-data.hyperliquid.xyz/<network>/leaderboard` rows: account value and pnl, roi, volume per window |
 
 ### WebSocket
 
@@ -85,6 +97,7 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 | `Order_update` | Order status update |
 | `Ws_message` | `{"channel", "data"}` messages decoded by channel |
 | `Asset_ctx` | `activeAssetCtx` channel (funding, mark, oracle, volumes) and its (un)subscribe requests, carried as `Ws_message.Unknown` |
+| `User_event` | `userEvents` subscription for any address (channel `user`: fills, funding, liquidation, nonUserCancel), carried as `Ws_message.Unknown` |
 
 ### Differences from the Hyperliquid API
 
@@ -98,6 +111,12 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 - `activeAssetCtx` has no `Subscription` or `Ws_message` constructor yet, because
   consumers match those variants exhaustively. Build requests with
   `Asset_ctx.Request` and read messages with `Asset_ctx.of_ws_message`.
+- `approveAgent`, `approveBuilderFee`, `userFillsByTime`, `userEvents` and the order
+  `builder` field live in their own modules rather than as new constructors of
+  `Exchange_action`, `Info_request` or `Subscription`, for the same reason. A server that
+  decodes `/exchange` bodies with `Exchange_request` accepts a builder order and drops
+  the builder; `User_signed_request.is_user_signed_body` picks the approval decoder.
+- `User_fill` ignores `builderFee` and `liquidation` on fills.
 - `liquidationPx` decodes to `None` when absent, `null`, or outside the fixed-point range
   (about 4.6e10).
 
@@ -118,6 +137,9 @@ checked only against hand-written samples and the simulator.
 | info | `userFills` | verified |
 | info | `clearinghouseState` | verified, including large and `null` `liquidationPx` |
 | exchange | `order`, `cancel`, `cancelByCloid`, `modify` requests | unverified (no signing here) |
+| exchange | `approveAgent`, `approveBuilderFee`, order `builder` | docs examples only |
+| ws | `userEvents` | docs shapes only |
+| stats | `leaderboard` | testnet sample (`test/fixtures/testnet-leaderboard-2026-10-13`) |
 | exchange | `Exchange_response`, `Order_status`, `Cancel_status` | unverified |
 | ws | `subscribe` / `unsubscribe` / `ping` requests | verified (the same JSON is accepted by mainnet) |
 | ws | `subscriptionResponse` | verified (`l2Book` echoes add `nSigFigs`, `mantissa`, `fast`, which are dropped) |
