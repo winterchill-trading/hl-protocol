@@ -7,8 +7,7 @@ let fills () = Yojson.Safe.from_file "fixtures/docs-user-fills/user_fills.json"
 let%expect_test "old readers ignore builderFee and liquidation" =
   let fills = list_of_yojson User_fill.t_of_yojson (fills ()) in
   List.iter fills ~f:(fun (fill : User_fill.t) -> print_s [%sexp (fill.tid : int)]);
-  [%expect
-    {|
+  [%expect {|
     118906512037719
     118906512037720
     118906512037721
@@ -28,7 +27,8 @@ let%expect_test "detailed fills keep builderFee and liquidation" =
     let again = User_fill.Detailed.t_of_yojson encoded in
     if not (User_fill.Detailed.equal d again)
     then print_s [%message "round trip differs" (again : User_fill.Detailed.t)]);
-  [%expect {|
+  [%expect
+    {|
     ((tid 118906512037719) (builder_fee (0.01)) (liquidation ()))
     ((tid 118906512037720) (builder_fee ())
      (liquidation
@@ -42,7 +42,8 @@ let%expect_test "detailed fills keep builderFee and liquidation" =
 let%expect_test "sexp of a detailed fill without extras matches the plain fill" =
   let fill = List.hd_exn (list_of_yojson User_fill.t_of_yojson (fills ())) in
   print_s [%sexp (User_fill.Detailed.of_fill fill : User_fill.Detailed.t)];
-  [%expect {|
+  [%expect
+    {|
     ((fill
       ((coin AVAX) (px 18.435) (sz 93.53) (side Buy) (time 1681222254710)
        (start_position 26.86) (dir "Open Long") (closed_pnl 0)

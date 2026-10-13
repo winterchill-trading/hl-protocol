@@ -68,7 +68,9 @@ module Detailed = struct
     in
     { fill = fill_of_yojson json
     ; builder_fee =
-        Json.member json ~key:"builderFee" |> null_to_none |> Option.map ~f:Usd.t_of_yojson
+        Json.member json ~key:"builderFee"
+        |> null_to_none
+        |> Option.map ~f:Usd.t_of_yojson
     ; liquidation =
         Json.member json ~key:"liquidation"
         |> null_to_none
