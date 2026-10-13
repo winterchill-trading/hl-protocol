@@ -81,6 +81,7 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 | `Meta` | Perp universe (`name`, `szDecimals`, `maxLeverage`) and coin/asset lookups |
 | `User_fills_by_time` | `userFillsByTime` request (at most 2000 fills per response) |
 | `Max_builder_fee` | `maxBuilderFee` request; the response is the approved cap in tenths of a basis point |
+| `User_role` | `userRole` request; the response is `user`, `agent` (with its user), `vault`, `subAccount` (with its master) or `missing` |
 
 ### Stats host
 
@@ -112,7 +113,7 @@ without conversion. This library adds Hyperliquid's JSON encodings and format ru
 - `activeAssetCtx` has no `Subscription` or `Ws_message` constructor yet, because
   consumers match those variants exhaustively. Build requests with
   `Asset_ctx.Request` and read messages with `Asset_ctx.of_ws_message`.
-- `approveAgent`, `approveBuilderFee`, `userFillsByTime`, `maxBuilderFee`, `userEvents` and the order
+- `approveAgent`, `approveBuilderFee`, `userFillsByTime`, `maxBuilderFee`, `userRole`, `userEvents` and the order
   `builder` field live in their own modules rather than as new constructors of
   `Exchange_action`, `Info_request` or `Subscription`, for the same reason. A server that
   decodes `/exchange` bodies with `Exchange_request` accepts a builder order and drops
